@@ -3,7 +3,7 @@
 require_relative 'lib/rubocop/version'
 
 Gem::Specification.new do |s|
-  s.name = 'rubocop'
+  s.name = 'rubocop-grantbirki'
   s.version = RuboCop::Version::STRING
   s.platform = Gem::Platform::RUBY
   s.required_ruby_version = '>= 2.7.0'
