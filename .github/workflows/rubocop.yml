@@ -14,6 +14,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+cache-mode: none
+
 jobs:
   spec-ubuntu:
     name: Spec - ubuntu ${{ matrix.ruby }}
@@ -28,7 +30,11 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
+          bundler-cache: false
+      - name: Install dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
       - name: Check requiring libraries successfully
         # See https://github.com/rubocop/rubocop/pull/4523#issuecomment-309136113
         run: ruby -I lib -r bundler/setup -r rubocop -e 'exit 0'
@@ -53,7 +59,11 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 'jruby' # Latest stable JRuby version
-          bundler-cache: true
+          bundler-cache: false
+      - name: Install dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
       - name: spec
         run: bundle exec rake spec
 
@@ -73,7 +83,11 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
+          bundler-cache: false
+      - name: Install dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
       - name: Check requiring libraries successfully
         # See https://github.com/rubocop/rubocop/pull/4523#issuecomment-309136113
         run: ruby -I lib -r bundler/setup -r rubocop -e 'exit 0'
@@ -118,7 +132,11 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
+          bundler-cache: false
+      - name: Install dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
       - name: ascii_spec
         env:
           CI_RUBY_VERSION: ${{ matrix.ruby }}
@@ -132,7 +150,11 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby # Latest stable CRuby version
-          bundler-cache: true
+          bundler-cache: false
+      - name: Install dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
       - name: Check documentation syntax
         run: bundle exec rake documentation_syntax_check
 
@@ -145,7 +167,11 @@ jobs:
         with:
           # Specify the minimum Ruby version 2.7 required for Prism to run.
           ruby-version: 2.7
-          bundler-cache: true
+          bundler-cache: false
+      - name: Install dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
       - name: spec
         env:
           PARSER_ENGINE: parser_prism
@@ -169,6 +195,10 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
-          bundler-cache: true
+          bundler-cache: false
+      - name: Install dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
       - name: spec
         run: bundle exec rake spec

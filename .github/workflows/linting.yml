@@ -10,6 +10,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+cache-mode: none
+
 jobs:
   lint-ruby:
     name: Ruby
@@ -19,7 +21,11 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby # Latest stable CRuby version
-          bundler-cache: true
+          bundler-cache: false
+      - name: Install dependencies
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
       - name: internal_investigation
         run: bundle exec rake internal_investigation
 
